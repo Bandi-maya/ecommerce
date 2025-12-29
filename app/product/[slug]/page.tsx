@@ -6,7 +6,7 @@ import NotFoundClient from "./NotFoundClient";
 async function fetchProduct(slug: string) {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/products/${slug}`);
-        console.log(res, 'gfhjkl;', slug)
+        console.log(res, 'gfhjkl;', slug, process.env.NEXT_PUBLIC_BASE_URL)
 
         if (!res.ok) {
             throw new Error("Failed to fetch product");
@@ -15,7 +15,7 @@ async function fetchProduct(slug: string) {
         const product = await res.json();
         return product;
     } catch (error) {
-        console.error(error);
+        console.error(error, process.env.NEXT_PUBLIC_BASE_URL);
         return null;
     }
 }
@@ -52,8 +52,12 @@ export default async function Page({
     params: Promise<{ slug: string }>
 }) {
     const { slug } = await params;
+    console.log('params:', slug);
 
     const product = await fetchProduct(slug);
+
+
+    console.log('product:', product);
 
     if (!product) {
         return <NotFoundClient />;
