@@ -3,9 +3,9 @@ import Product from "@/models/NewProduct";
 import Variant from "@/models/NewVariant";
 import mongoose from "mongoose";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid product ID" }, { status: 400 });
     }
@@ -25,9 +25,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }>  }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const deleted = await Product.findByIdAndDelete(id);
     if (!deleted) return NextResponse.json({ message: "Product not found" }, { status: 404 });
 

@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import Product from "@/models/NewProduct";
 import Variant from "@/models/NewVariant";
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     const product = await Product.findOne({ slug })
       .populate("categories")

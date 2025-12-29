@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises"; // Use promises for cleaner code
 import path from "path";
 import ContactInfo from "@/models/ContactInfo";
@@ -12,7 +12,7 @@ export async function GET() {
   return NextResponse.json(contact);
 }
 
-export const PUT = withAuth(async (user: UserPayload, req: Request) => {
+export const PUT = withAuth(async (req: NextRequest, user: UserPayload) => {
   try {
     await connectDB();
 

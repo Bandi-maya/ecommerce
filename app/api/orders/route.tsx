@@ -6,11 +6,11 @@ import Product from "@/models/NewProduct";
 import Variant from "@/models/NewVariant";
 import User from "@/models/User";
 import ContactInfo from "@/models/ContactInfo";
-import { withAuth } from "@/lib/withAuth";
+import { UserPayload, withAuth } from "@/lib/withAuth";
 import sendEmail from "@/lib/email";
 
 // ------------------ CREATE ORDER ------------------
-export const POST = withAuth(async (user, req: NextRequest) => {
+export const POST = withAuth(async (req: NextRequest, user: UserPayload) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -117,7 +117,7 @@ async function sendOrderEmails(order: any, user: any) {
 }
 
 // ------------------ GET USER ORDERS ------------------
-export const GET = withAuth(async (user, req: NextRequest) => {
+export const GET = withAuth(async (req: NextRequest, user: UserPayload) => {
   try {
     const orders = await Order.find({ userId: user.id })
       .populate({ path: 'items.productId' })

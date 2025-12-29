@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Cart from "@/models/Cart";
 import Product from "@/models/NewProduct";
 import Variant from "@/models/NewVariant";
-import { getLivePrice } from "@/lib/cartHelpers";
+// import { getLivePrice } from "@/lib/cartHelpers";
 import { verifyToken } from "@/lib/auth"; // Helper to get user from JWT
 import { connectDB } from "@/lib/db";
 

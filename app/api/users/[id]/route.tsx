@@ -5,7 +5,7 @@ import { withAuth, UserPayload } from "@/lib/withAuth";
 import { connectDB } from "@/lib/db";
 
 // GET /api/users/:id
-export const GET = withAuth(async (user: UserPayload, req: NextRequest) => {
+export const GET = withAuth(async (req: NextRequest, user: UserPayload) => {
   await connectDB();
 
   try {

@@ -10,7 +10,7 @@ export type UserPayload = {
 };
 
 export function withAuth(
-  handler: (user: UserPayload, req: NextRequest) => Promise<NextResponse> | NextResponse
+  handler: (req: NextRequest, user: UserPayload) => Promise<NextResponse> | NextResponse
 ) {
   return async (req: NextRequest) => {
     try {
@@ -22,7 +22,7 @@ export function withAuth(
 
       const payload = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload;
 
-      return handler(payload, req);
+      return handler(req, payload);
     } catch (err: any) {
       return NextResponse.json({ message: err.message || "Unauthorized" }, { status: 401 });
     }

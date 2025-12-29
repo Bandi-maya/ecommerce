@@ -3,11 +3,13 @@ import { NextResponse } from "next/server";
 import Brand from "@/models/Brand";
 import { connectDB } from "@/lib/db";
 
-export const GET = async (req: Request, { params }: { params: { id: string } }) => {
+export const GET = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
   await connectDB();
 
   try {
-    const brand = await Brand.findById(params.id);
+    const { id } = await params;
+
+    const brand = await Brand.findById(id);
     if (!brand) return NextResponse.json({ message: "Brand not found" }, { status: 404 });
 
     return NextResponse.json(brand);
@@ -16,14 +18,16 @@ export const GET = async (req: Request, { params }: { params: { id: string } }) 
   }
 };
 
-export const PUT = async (req: Request, { params }: { params: { id: string } }) => {
+export const PUT = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
   await connectDB();
 
   try {
+    const { id } = await params;
+
     const { title, subTitle, description } = await req.json();
 
     const brand = await Brand.findByIdAndUpdate(
-      params.id,
+      id,
       { title, subTitle, description },
       { new: true, runValidators: true }
     );
@@ -39,11 +43,13 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
   }
 };
 
-export const DELETE = async (req: Request, { params }: { params: { id: string } }) => {
+export const DELETE = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
   await connectDB();
 
   try {
-    const brand = await Brand.findByIdAndDelete(params.id);
+    const { id } = await params;
+
+    const brand = await Brand.findByIdAndDelete(id);
     if (!brand) return NextResponse.json({ message: "Brand not found" }, { status: 404 });
 
     return NextResponse.json({ message: "Brand deleted successfully" });
