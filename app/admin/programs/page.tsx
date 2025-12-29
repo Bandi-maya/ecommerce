@@ -309,7 +309,7 @@ export default function Programs() {
             learningOutcomes: program.learningOutcomes?.join(", ") || ""  // Will be converted to array on submit
         });
 
-        setPreview((apiUrl.replace('/api', '') + program.image?.url) || null);
+        setPreview(('http://49.50.83.49' + program.image?.url) || null);
         setIsFormExpanded(true);
         setTimeout(() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -912,7 +912,7 @@ function ProgramCard({ program, index, onEdit, onDelete }: any) {
             {/* IMAGE */}
             <div className="relative h-48 overflow-hidden">
                 <img
-                    src={apiUrl.replace('/api', '') + program.image?.url}
+                    src={'http://49.50.83.49' + program.image?.url}
                     alt={program.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -1042,7 +1042,7 @@ function ProgramRow({ program, index, onEdit, onDelete }: any) {
             {/* IMAGE */}
             <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
                 <img
-                    src={apiUrl.replace('/api', '') + program.image?.url}
+                    src={'http://49.50.83.49' + program.image?.url}
                     alt={program.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />

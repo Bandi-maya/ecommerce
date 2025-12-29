@@ -370,7 +370,7 @@ const Programs = () => {
                                             />
                                             <div className="relative overflow-hidden rounded-2xl aspect-[4/3] shadow-2xl">
                                                 <img
-                                                    src={program.image?.url || STEM_IMAGES[index % STEM_IMAGES.length]}
+                                                    src={'http://49.50.83.49' + program.image?.url || STEM_IMAGES[index % STEM_IMAGES.length]}
                                                     alt={program.title}
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />

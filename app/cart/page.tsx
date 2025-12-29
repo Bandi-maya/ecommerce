@@ -258,7 +258,7 @@ const Cart = () => {
                                                     } as React.CSSProperties}
                                                 >
                                                     <img
-                                                        src={apiUrl.replace('api', '') + item.productId?.media?.[0]?.url || item.image}
+                                                        src={'http://49.50.83.49' + item.productId?.media?.[0]?.url || item.image}
                                                         alt={item.productId?.name}
                                                         className="w-full h-full object-cover"
                                                     />

@@ -308,7 +308,7 @@ const VariantNode = ({ nodes, path = [], depth = 1, addNode, updateNodeDeep, lev
                           </div>
                         ) : (
                           <img
-                            src={`${m.url}`}
+                            src={`${'http://49.50.83.49' + m.url}`}
                             alt="Saved"
                             className="w-full h-full object-cover rounded-lg border border-[var(--neutral-200)] shadow-sm"
                           />
@@ -1060,7 +1060,7 @@ export default function Products() {
             <span className="text-sm font-medium text-[var(--neutral-700)]">Single Product (No Variants)</span>
           </label>
         </div>
-{/* 
+        {/* 
         <label className="flex w-50 items-center gap-2 px-3 py-2 bg-[var(--card)] rounded-lg border border-[var(--border)] cursor-pointer hover:border-[var(--primary-300)] transition-all select-none shadow-sm">
           <span className="text-sm font-medium text-[var(--neutral-700)]">Discount</span>
           <input
@@ -1242,7 +1242,7 @@ export default function Products() {
                   </div>
                 ) : (
                   <img
-                    src={m.url.startsWith('http') || m.url.startsWith('blob') ? m.url : `${m.url}`}
+                    src={m.url.startsWith('http') || m.url.startsWith('blob') ? 'http://49.50.83.49' + m.url : `${'http://49.50.83.49' + m.url}`}
                     alt={m.alt || "Product"}
                     className="w-full h-full object-cover rounded-xl border border-[var(--neutral-200)] shadow-sm"
                   />
@@ -1317,7 +1317,7 @@ export default function Products() {
                       <div className="w-10 h-10 rounded bg-[var(--neutral-100)] flex-shrink-0 flex items-center justify-center border border-[var(--neutral-200)] overflow-hidden">
                         {p.images?.[0]?.url ? (
                           <img
-                            src={`${apiUrl.replace('api', '')}${p.images[0].url}`}
+                            src={`${'http://49.50.83.49' + p.images[0].url}`}
                             alt=""
                             className="w-full h-full object-cover"
                           />

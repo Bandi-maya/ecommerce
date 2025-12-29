@@ -39,7 +39,7 @@ export default function ContactInfo() {
         hours: contact.hours || ""
       });
 
-      setLogoPreview((apiUrl.replace('/api', '') + contact.logo_url) || "");
+      setLogoPreview(('http://49.50.83.49' + contact.logo_url) || "");
     }
   }, [contact]);
 

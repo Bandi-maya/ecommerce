@@ -177,7 +177,7 @@ const ProductDetailClient = ({ product }: any) => {
                                 />
                             ) : (
                                 <img
-                                    src={`${apiUrl.replace("api", "")}${mainImage?.url || mainImage}`} // Fallback for string-only legacy URLs
+                                    src={`${'http://49.50.83.49'}${mainImage?.url || mainImage}`} // Fallback for string-only legacy URLs
                                     alt={product.name}
                                     className="w-full h-full object-cover transition-all duration-300"
                                 />
@@ -213,7 +213,7 @@ const ProductDetailClient = ({ product }: any) => {
                                             </div>
                                         ) : (
                                             <img
-                                                src={`${apiUrl.replace("api", "")}${m.url}`}
+                                                src={`${'http://49.50.83.49'}${m.url}`}
                                                 className="w-full h-full object-cover"
                                             />
                                         )}
