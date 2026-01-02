@@ -250,27 +250,31 @@ export default function ProductCard({ product, index = 0 }: any) {
             {/* Floating particles effect on hover */}
             {isHovering && (
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white rounded-full will-change-transform"
-                    initial={{
-                      x: Math.random() * 100 + '%',
-                      y: '100%',
-                      opacity: 0
-                    }}
-                    animate={{
-                      y: '-100%',
-                      opacity: [0, 1, 0]
-                    }}
-                    transition={{
-                      duration: prefersReducedMotion ? 0.8 : 1.2,
-                      delay: i * 0.2,
-                      repeat: prefersReducedMotion ? 0 : Infinity,
-                      repeatDelay: prefersReducedMotion ? 0 : 2,
-                    }}
-                  />
-                ))}
+                {[...Array(3)].map((_, i) => {
+                  // Deterministic spread so server/client match
+                  const left = `${(i * 37) % 100}%`
+                  return (
+                    <motion.div
+                      key={`hover-particle-${i}`}
+                      className="absolute w-1 h-1 bg-white rounded-full will-change-transform"
+                      initial={{
+                        x: left,
+                        y: '100%',
+                        opacity: 0
+                      }}
+                      animate={{
+                        y: '-100%',
+                        opacity: [0, 1, 0]
+                      }}
+                      transition={{
+                        duration: prefersReducedMotion ? 0.8 : 1.2,
+                        delay: i * 0.2,
+                        repeat: prefersReducedMotion ? 0 : Infinity,
+                        repeatDelay: prefersReducedMotion ? 0 : 2,
+                      }}
+                    />
+                  )
+                })}
               </div>
             )}
           </div>

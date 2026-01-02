@@ -1,6 +1,22 @@
 "use client";
 
-import { User as UserIcon, LogOut, Settings, LayoutDashboard, ShieldCheck, Menu, X, ChevronLeft, ChevronRight, Package, Phone } from "lucide-react";
+import { 
+  User as UserIcon, 
+  LogOut, 
+  Settings, 
+  LayoutDashboard, 
+  Menu, 
+  X, 
+  Package, 
+  Phone,
+  // New specific icons imported below
+  BadgeCheck, 
+  BookOpen, 
+  Tags, 
+  ShoppingCart, 
+  Users, 
+  Palette 
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +26,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@/contexts/UserContext";
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-
-// Get CSS variable helper
-const getCSSVar = (varName: string, fallback?: string) => {
-  if (typeof window === 'undefined') return fallback || '';
-  return getComputedStyle(document.documentElement)
-    .getPropertyValue(varName)
-    .trim() || fallback || '';
-};
 
 // Define User type interface
 interface AppUser {
@@ -31,7 +39,6 @@ interface AppUser {
   email?: string;
   avatar?: string;
   role?: string;
-  // Add other user properties you expect
 }
 
 interface SidebarProps {
@@ -39,23 +46,32 @@ interface SidebarProps {
   setIsMobileOpen: (open: boolean) => void;
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
+  isDesktop: boolean;
 }
 
-function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }: SidebarProps) {
+function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, isDesktop }: SidebarProps) {
   const location = usePathname();
   const { logout } = useUser();
   const router = useRouter();
+
+  useEffect(() => {
+    // Close mobile sidebar when switching to desktop
+    if (isDesktop && isMobileOpen) {
+      setIsMobileOpen(false);
+    }
+  }, [isDesktop, isMobileOpen, setIsMobileOpen]);
   
+  // Updated navItems with unique icons
   const navItems = [
     { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
-    { label: "Brands", path: "/admin/brands", icon: ShieldCheck },
-    { label: "Programs", path: "/admin/programs", icon: ShieldCheck },
-    { label: "Categories", path: "/admin/categories", icon: ShieldCheck },
+    { label: "Brands", path: "/admin/brands", icon: BadgeCheck },
+    { label: "Programs", path: "/admin/programs", icon: BookOpen },
+    { label: "Categories", path: "/admin/categories", icon: Tags },
     { label: "Products", path: "/admin/products", icon: Package },
-    { label: "Orders", path: "/admin/orders", icon: ShieldCheck },
-    { label: "Customers", path: "/admin/customers", icon: ShieldCheck },
+    { label: "Orders", path: "/admin/orders", icon: ShoppingCart },
+    { label: "Customers", path: "/admin/customers", icon: Users },
     { label: "Contact Info", path: "/admin/contact-info", icon: Phone },
-    { label: "Customization", path: "/admin/customization", icon: Settings }
+    { label: "Customization", path: "/admin/customization", icon: Palette }
   ];
 
   const handleMobileLogout = () => {
@@ -64,18 +80,17 @@ function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }:
     setIsMobileOpen(false);
   };
 
-  const getColors = () => {
-    return {
-      primary: getCSSVar('--primary', '#3b82f6'),
-      primaryForeground: getCSSVar('--primary-foreground', '#ffffff'),
-      foreground: getCSSVar('--foreground', '#020817'),
-      mutedForeground: getCSSVar('--muted-foreground', '#64748b'),
-      border: getCSSVar('--border', '#e2e8f0'),
-      card: getCSSVar('--card', '#ffffff'),
-      background: getCSSVar('--background', '#f8fafc'),
-      accent: getCSSVar('--accent', '#8b5cf6')
-    };
-  };
+  // Use CSS variable references so SSR and CSR produce identical inline styles
+  const getColors = () => ({
+    primary: 'var(--primary)',
+    primaryForeground: 'var(--primary-foreground)',
+    foreground: 'var(--foreground)',
+    mutedForeground: 'var(--muted-foreground)',
+    border: 'var(--border)',
+    card: 'var(--card)',
+    background: 'var(--background)',
+    accent: 'var(--accent)'
+  });
 
   const colors = getColors();
 
@@ -130,7 +145,7 @@ function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }:
               </span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-md ml-2"
                 style={{ 
-                  backgroundColor: `${colors.primary}10`,
+                  backgroundColor: `${colors.primary} / 0.1`,
                   color: colors.primary
                 }}>
                 Admin
@@ -146,7 +161,7 @@ function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }:
             >
               <div className="w-8 h-8 rounded-lg flex items-center justify-center"
                 style={{ 
-                  backgroundColor: `${colors.primary}10`,
+                  backgroundColor: `${colors.primary} / 0.1`,
                   color: colors.primary
                 }}>
                 <LayoutDashboard size={18} />
@@ -162,15 +177,19 @@ function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }:
             className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 transition-colors"
             style={{ color: colors.mutedForeground }}
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-expanded={!isCollapsed}
           >
-            {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+            {/* Chevron icons removed per request; keep accessible label */}
+            <span className="sr-only">{isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}</span>
           </motion.button>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const isActive = location === item.path;
+            const loc = (location || '').replace(/\/$/, '');
+            const path = item.path.replace(/\/$/, '');
+            const isActive = loc === path || (path !== '/admin' && loc.startsWith(path));
             const Icon = item.icon;
 
             return (
@@ -282,7 +301,7 @@ function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }:
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{
-                    backgroundColor: `${colors.primary}10`,
+                  backgroundColor: `${colors.primary} / 0.1`,
                     color: colors.primary
                   }}>
                   <LayoutDashboard size={24} />
@@ -321,9 +340,11 @@ function Sidebar({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed }:
               >
                 Admin Sections
               </motion.h3>
-              <div className="space-y-1">
+              <div className="space-y-1" role="navigation" aria-label="Admin sections">
                 {navItems.map((item, index) => {
-                  const isActive = location === item.path;
+                  const loc = (location || '').replace(/\/$/, '');
+                  const path = item.path.replace(/\/$/, '');
+                  const isActive = loc === path || (path !== '/admin' && loc.startsWith(path));
                   const Icon = item.icon;
 
                   return (
@@ -395,26 +416,13 @@ interface HeaderProps {
   toggleMobileSidebar: () => void;
   toggleDesktopSidebar: () => void;
   isCollapsed: boolean;
+  isDesktop: boolean;
 }
 
-function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: HeaderProps) {
+function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed, isDesktop }: HeaderProps) {
   const { user, logout } = useUser() as { user: AppUser | null; logout: () => void };
   const router = useRouter();
   const pathname = usePathname();
-
-  // Get CSS variables
-  const getColors = () => {
-    return {
-      primary: getCSSVar('--primary', '#3b82f6'),
-      accent: getCSSVar('--accent', '#8b5cf6'),
-      foreground: getCSSVar('--foreground', '#020817'),
-      mutedForeground: getCSSVar('--muted-foreground', '#64748b'),
-      border: getCSSVar('--border', '#e2e8f0'),
-      card: getCSSVar('--card', '#ffffff')
-    };
-  };
-
-  const colors = getColors();
 
   const handleLogout = () => {
     logout();
@@ -441,13 +449,10 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
     <motion.header 
       initial={false}
       animate={{ 
-        left: typeof window !== 'undefined' && window.innerWidth >= 1024 
-          ? (isCollapsed ? '80px' : '280px') 
-          : '0px' 
-      }}
+        left: isDesktop ? (isCollapsed ? '80px' : '280px') : '0px'
+      }} 
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed top-0 right-0 z-40 h-16 md:h-20 bg-white/95 backdrop-blur-md shadow-sm border-b"
-      style={{ borderColor: colors.border }}
+      className="fixed top-0 right-0 z-40 h-16 md:h-20 bg-card/95 backdrop-blur-md shadow-sm border-b border-border"
     >
       <div className="flex h-full items-center justify-between px-4 md:px-6">
         {/* Left Side */}
@@ -457,11 +462,11 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
             onClick={toggleDesktopSidebar}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="hidden lg:flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 transition-colors"
-            style={{ color: colors.mutedForeground }}
+            className="hidden lg:flex items-center justify-center w-10 h-10 rounded-lg text-muted-foreground hover:bg-accent/10 transition-colors"
             aria-label="Toggle sidebar"
+            aria-expanded={!isCollapsed}
           >
-            <Menu size={20} />
+            <Menu size={15} />
           </motion.button>
 
           {/* Mobile Hamburger Menu */}
@@ -469,8 +474,7 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
             onClick={toggleMobileSidebar}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 transition-colors"
-            style={{ color: colors.mutedForeground }}
+            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg text-muted-foreground hover:bg-accent/10 transition-colors"
             aria-label="Open menu"
           >
             <Menu size={20} />
@@ -482,12 +486,11 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
-              className="text-lg font-bold tracking-tight" 
-              style={{ color: colors.foreground }}
+              className="text-lg font-bold tracking-tight text-foreground"
             >
               {getPageTitle()}
             </motion.h2>
-            <p className="text-xs hidden sm:block" style={{ color: colors.mutedForeground }}>
+            <p className="text-xs hidden sm:block text-muted-foreground">
               Admin Panel Control
             </p>
           </div>
@@ -504,15 +507,11 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
                 className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors group outline-none"
               >
                 <div className="relative">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden border"
-                    style={{
-                      backgroundColor: `${colors.primary}10`,
-                      borderColor: colors.border
-                    }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden border bg-primary/10 border-border">
                     {hasAvatar(user) ? (
                       <img src={user.avatar} alt="User" className="h-full w-full object-cover" />
                     ) : (
-                      <UserIcon className="w-5 h-5" style={{ color: colors.primary }} />
+                      <UserIcon className="w-5 h-5 text-primary" />
                     )}
                   </div>
                   {hasRole(user, "admin") && (
@@ -521,17 +520,17 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
                       animate={{ scale: 1 }}
                       className="absolute -top-1 -right-1 border-2 w-3 h-3 rounded-full"
                       style={{
-                        backgroundColor: colors.accent,
-                        borderColor: colors.card
+                        backgroundColor: 'var(--accent)',
+                        borderColor: 'var(--card)'
                       }}
                       title="Admin Verified" />
                   )}
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="text-sm font-semibold truncate max-w-[120px]" style={{ color: colors.foreground }}>
+                  <p className="text-sm font-semibold truncate max-w-[120px] text-foreground">
                     {user?.name || "Administrator"}
                   </p>
-                  <p className="text-xs truncate max-w-[120px]" style={{ color: colors.mutedForeground }}>
+                  <p className="text-xs truncate max-w-[120px] text-muted-foreground">
                     {user?.email || "admin@stem-park.com"}
                   </p>
                 </div>
@@ -540,40 +539,35 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
 
             <DropdownMenuContent 
               align="end" 
-              className="w-56 p-2 rounded-xl shadow-xl border"
-              style={{
-                backgroundColor: colors.card,
-                borderColor: colors.border
-              }}>
+              className="w-56 p-2 rounded-xl shadow-xl border bg-card border-border">
               <DropdownMenuLabel className="font-normal p-3">
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-bold truncate" style={{ color: colors.foreground }}>
+                    <p className="text-sm font-bold truncate text-foreground">
                       {user?.name || "Administrator"}
                     </p>
                     {hasRole(user, "admin") && (
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded uppercase"
                         style={{
-                          backgroundColor: `${colors.primary}10`,
-                          color: colors.primary
+                          backgroundColor: 'var(--primary-background)',
+                          color: 'var(--primary)'
                         }}>
                         Admin
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-medium truncate"
-                    style={{ color: colors.mutedForeground }}>
+                  <p className="text-xs font-medium truncate text-muted-foreground">
                     {user?.email || "admin@stem-park.com"}
                   </p>
                 </div>
               </DropdownMenuLabel>
 
-              <DropdownMenuSeparator style={{ backgroundColor: colors.border }} />
+              <DropdownMenuSeparator className="bg-border" />
 
               <DropdownMenuItem asChild className="cursor-pointer py-2.5 rounded-lg focus:bg-gray-50">
                 <Link href="/admin/profile" className="flex items-center w-full">
-                  <UserIcon className="mr-3 h-4 w-4" style={{ color: colors.mutedForeground }} />
-                  <span className="font-medium text-sm" style={{ color: colors.foreground }}>
+                  <UserIcon className="mr-3 h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium text-sm text-foreground">
                     Profile
                   </span>
                 </Link>
@@ -581,14 +575,14 @@ function Header({ toggleMobileSidebar, toggleDesktopSidebar, isCollapsed }: Head
 
               <DropdownMenuItem asChild className="cursor-pointer py-2.5 rounded-lg focus:bg-gray-50">
                 <Link href="/admin/settings" className="flex items-center w-full">
-                  <Settings className="mr-3 h-4 w-4" style={{ color: colors.mutedForeground }} />
-                  <span className="font-medium text-sm" style={{ color: colors.foreground }}>
+                  <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium text-sm text-foreground">
                     Settings
                   </span>
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuSeparator style={{ backgroundColor: colors.border }} />
+              <DropdownMenuSeparator className="bg-border" />
 
               <DropdownMenuItem
                 onClick={handleLogout}
@@ -613,40 +607,59 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
-  // Get CSS variables for main content
-  const getColors = () => {
-    return {
-      background: getCSSVar('--background', '#f8fafc'),
-      mutedForeground: getCSSVar('--muted-foreground', '#64748b'),
-      foreground: getCSSVar('--foreground', '#020817'),
-      card: getCSSVar('--card', '#ffffff'),
-      border: getCSSVar('--border', '#e2e8f0')
-    };
-  };
+  useEffect(() => setMounted(true), []);
+  
+  // Track screen size and auto close/open behaviors
+  useEffect(() => {
+    const update = () => setIsDesktop(typeof window !== 'undefined' && window.innerWidth >= 1024);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
-  const colors = getColors();
+  useEffect(() => {
+    if (isDesktop && isMobileOpen) setIsMobileOpen(false);
+    if (!isDesktop && isCollapsed) setIsCollapsed(false);
+  }, [isDesktop]);
+
+  // Close mobile on route change
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [pathname]);
 
   const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen);
-  const toggleDesktopSidebar = () => setIsCollapsed(!isCollapsed);
+  const toggleDesktopSidebar = () => {
+    if (isDesktop) {
+      setIsCollapsed(!isCollapsed);
+    } else {
+      setIsMobileOpen(!isMobileOpen);
+    }
+  };
+
+  if (!mounted) {
+    return <div className="min-h-screen flex bg-background" />;
+  }
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: colors.background }}>
+    <div className="min-h-screen flex bg-background">
       {/* Sidebar */}
       <Sidebar 
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
+        isDesktop={isDesktop}
       />
 
       {/* Main Content Area */}
       <motion.div 
         initial={false}
         animate={{ 
-          paddingLeft: typeof window !== 'undefined' && window.innerWidth >= 1024 
-            ? (isCollapsed ? '80px' : '280px')
-            : '0px',
+          paddingLeft: isDesktop ? (isCollapsed ? '80px' : '280px') : '0px',
           paddingRight: '0px'
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -657,6 +670,7 @@ export default function Layout({ children }: LayoutProps) {
           isCollapsed={isCollapsed}
           toggleMobileSidebar={toggleMobileSidebar}
           toggleDesktopSidebar={toggleDesktopSidebar}
+          isDesktop={isDesktop}
         />
 
         {/* Main Content */}
@@ -669,10 +683,10 @@ export default function Layout({ children }: LayoutProps) {
               transition={{ delay: 0.1 }}
               className="mb-6 md:mb-8"
             >
-              <div className="flex items-center text-sm" style={{ color: colors.mutedForeground }}>
+              <div className="flex items-center text-sm text-muted-foreground">
                 <Link href="/admin" className="hover:underline">Dashboard</Link>
                 <span className="mx-2">/</span>
-                <span className="font-medium" style={{ color: colors.foreground }}>
+                <span className="font-medium text-foreground">
                   Current Page
                 </span>
               </div>
@@ -683,11 +697,7 @@ export default function Layout({ children }: LayoutProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-2xl border shadow-sm p-6 min-h-[calc(100vh-120px)]"
-              style={{
-                backgroundColor: colors.card,
-                borderColor: colors.border
-              }}
+              className="rounded-2xl border bg-card border-border shadow-sm p-6 min-h-[calc(100vh-120px)]"
             >
               {children}
             </motion.div>
@@ -697,5 +707,3 @@ export default function Layout({ children }: LayoutProps) {
     </div>
   );
 }
-
-// Internationalization helpers removed — labels are hard-coded per project preference.

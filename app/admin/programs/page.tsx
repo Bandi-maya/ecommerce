@@ -98,11 +98,6 @@ export default function Programs() {
 
     const [form, setForm] = useState({
         title: "",
-    })
-
-    const prefersReducedMotion = useReducedMotion()
-
-    // (rest of file continues)
         subtitle: "",
         description: "",
         features: "",         // Will be converted to array on submit
@@ -116,7 +111,12 @@ export default function Programs() {
         certification: "",
         equipment: "",        // Will be converted to array on submit
         learningOutcomes: ""  // Will be converted to array on submit
-    });
+    })
+
+    const prefersReducedMotion = useReducedMotion()
+
+    // (rest of file continues)
+
 
     /* ---------------- FETCH ---------------- */
     const fetchPrograms = async () => {
@@ -755,15 +755,9 @@ export default function Programs() {
                                     <div className="md:col-span-2 flex items-center justify-between pt-6 border-t border-slate-100">
                                         <div className="flex items-center gap-4">
                                             <select name="icon" value={form.icon} onChange={handleChange} className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold bg-slate-50 outline-none">
-                                                {ICONS.map((i: any) => {
-                                                    const Icon = i.icon;
-
-                                                    return <option key={i.value} value={i.value}>
-                                                        <div>
-                                                            <Icon className="w-6 h-6 text-primary" />{i.value} Icon
-                                                        </div>
-                                                    </option>
-                                                })}
+                                                {ICONS.map((i: any) => (
+                                                    <option key={i.value} value={i.value}>{i.value}</option>
+                                                ))}
                                             </select>
                                             <select name="type" value={form.type} onChange={handleChange} className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold bg-slate-50 outline-none">
                                                 <option value="main">Main Program</option>

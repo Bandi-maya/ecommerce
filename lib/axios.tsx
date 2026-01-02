@@ -1,52 +1,66 @@
 import { apiUrl } from "./constants";
 
 export function getToken() {
-  let user: any = localStorage.getItem('user') || null;
+  if (typeof window === 'undefined') return null;
   try {
-    if (user) {
-      user = JSON.parse(user)
-      console.log(user)
-      if (typeof user === 'object') {
-        return user?.token
-      }
-    }
+    const raw = localStorage.getItem('user');
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    if (user && typeof user === 'object') return user?.token || null;
   } catch {
-    return null
+    return null;
   }
+  return null;
 }
 
 export const apiFetch = async (url: string, options: any = {}) => {
-  const isAdmin = window.location.pathname.includes('admin');
+  const isAdmin = typeof window !== 'undefined' && window.location.pathname.includes('admin');
   const { data, headers, ...rest } = options;
 
   // Determine if body is FormData
   const isFormData = data instanceof FormData;
 
-  const res = await fetch(`${apiUrl}${url}`, {
-    ...rest,
-    headers: {
-      ...(headers || {}),
-      Authorization: `Bearer ${getToken()}`,
-      ...(isFormData ? {} : { "Content-Type": "application/json" }),
-    },
-    body: isFormData ? data : data ? JSON.stringify(data) : undefined,
-  });
+  let res;
+  try {
+    res = await fetch(`${apiUrl}${url}`, {
+      ...rest,
+      headers: {
+        ...(headers || {}),
+        Authorization: `Bearer ${getToken() || ""}`,
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      },
+      body: isFormData ? data : data ? JSON.stringify(data) : undefined,
+    });
+  } catch (networkErr: any) {
+    const err = new Error("Network request failed: " + (networkErr?.message || String(networkErr)));
+    (err as any).status = 0;
+    (err as any).detail = networkErr?.message || String(networkErr);
+    (err as any).url = `${apiUrl}${url}`;
+    throw err;
+  }
 
   if (!res.ok) {
-    let error: any = {
-      status: res.status,
-      message: "Request failed",
-    };
+    let errorBody: any = { status: res.status, message: "Request failed" };
 
     try {
       const json = await res.json();
-      error = json;
+      errorBody = json || errorBody;
     } catch {
-      error.message = await res.text();
+      try {
+        errorBody.message = await res.text();
+      } catch (e) {
+        /* ignore */
+      }
     }
 
-    throw error;
+    const err = new Error(errorBody.message || `Request failed with status ${res.status}`);
+    Object.assign(err, errorBody);
+    throw err;
   }
 
-  return res.json();
+  try {
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
 };

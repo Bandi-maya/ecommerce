@@ -1,6 +1,6 @@
 "use client"
 
-import { Truck, Shield, Clock, Sparkles } from "lucide-react"
+import { Truck, Shield, Clock, Sparkles, LucideIcon } from "lucide-react"
 import { motion } from "framer-motion"
 import BackgroundDecorations from "./BackgroundDecorations"
 
@@ -9,84 +9,139 @@ interface TrustBadgesProps {
 }
 
 const TrustBadges = ({ getCSSVar }: TrustBadgesProps) => {
-  const cssVars = {
-    secondary: () => getCSSVar('--secondary', '#f1f5f9'),
-    border: () => getCSSVar('--border', '#e2e8f0'),
-    background: () => getCSSVar('--background', '#ffffff'),
-    primary: () => getCSSVar('--primary', '#3b82f6'),
-    foreground: () => getCSSVar('--foreground', '#020817'),
-    mutedForeground: () => getCSSVar('--muted-foreground', '#64748b'),
-  }
+  // Helper for colors
+  const c = (varName: string, fallback: string) => getCSSVar(varName, fallback)
+
+  const badges = [
+    { 
+      icon: Truck, 
+      title: "Free Shipping", 
+      desc: "On orders $50+",
+      delay: 0
+    },
+    { 
+      icon: Shield, 
+      title: "1-Year Warranty", 
+      desc: "Quality guaranteed",
+      delay: 0.1
+    },
+    { 
+      icon: Clock, 
+      title: "24/7 Support", 
+      desc: "Live expert chat",
+      delay: 0.2
+    },
+    { 
+      icon: Sparkles, 
+      title: "STEM Certified", 
+      desc: "Education approved",
+      delay: 0.3
+    },
+  ]
 
   return (
-    <motion.section
-      initial={{ y: 50, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      className="relative py-10 sm:py-12 md:py-14 lg:py-16 border-y rounded-b-3xl mx-0 sm:mx-2 md:mx-4 mb-8 sm:mb-12 md:mb-16"
-      style={{
-        backgroundColor: cssVars.secondary(),
-        borderColor: cssVars.border()
-      }}
-    >
-      {/* Added Figure Lines for Trust Section */}
+    <section className="relative w-full py-16 overflow-hidden">
+      {/* Subtle Grid Background for the section */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{ 
+          backgroundImage: `radial-gradient(${c('--foreground', '#000')} 1px, transparent 1px)`,
+          backgroundSize: '24px 24px'
+        }}
+      />
+
       <BackgroundDecorations type="trust" />
 
-      {/* Decorative border lines */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-50"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-50"></div>
-
-      <div className="container px-4 sm:px-6 md:px-8 lg:px-10 relative z-10">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-          {[
-            { icon: Truck, text: "Free Shipping", desc: "Orders $50+", mobileText: "Free Shipping $50+" },
-            { icon: Shield, text: "1-Year Warranty", desc: "Quality guaranteed", mobileText: "Warranty" },
-            { icon: Clock, text: "24/7 Support", desc: "Always here to help", mobileText: "Support" },
-            { icon: Sparkles, text: "STEM Certified", desc: "Education approved", mobileText: "Certified" },
-          ].map((badge, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              className="flex flex-col items-center text-center gap-3 sm:gap-4 md:gap-5 py-4 sm:py-5 md:py-6 rounded-2xl hover:shadow-xl transition-all border border-gray-200/50"
-              style={{
-                backgroundColor: cssVars.background(),
-                boxShadow: '0 4px 25px rgba(0,0,0,0.08)'
-              }}
-            >
-              <div
-                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4 border border-gray-200"
-                style={{ backgroundColor: `${cssVars.primary()}10` }}
-              >
-                <badge.icon
-                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8"
-                  style={{ color: cssVars.primary() }}
-                />
-              </div>
-              <div className="px-2 sm:px-4">
-                <span
-                  className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold block"
-                  style={{ color: cssVars.foreground() }}
-                >
-                  <span className="hidden sm:inline">{badge.text}</span>
-                  <span className="sm:hidden">{badge.mobileText}</span>
-                </span>
-                <span
-                  className="text-xs sm:text-sm md:text-base lg:text-lg block mt-1 sm:mt-2 md:mt-3 opacity-75"
-                  style={{ color: cssVars.mutedForeground() }}
-                >
-                  <span className="hidden sm:inline">{badge.desc}</span>
-                </span>
-              </div>
-            </motion.div>
+      <div className="container relative z-10 px-4 mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {badges.map((badge, i) => (
+            <BadgeCard 
+              key={i} 
+              badge={badge} 
+              c={c} 
+            />
           ))}
         </div>
       </div>
-    </motion.section>
+    </section>
+  )
+}
+
+// Extracted Card Component for cleaner logic
+const BadgeCard = ({ badge, c }: { badge: any, c: any }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: badge.delay, duration: 0.5 }}
+      whileHover="hover"
+      className="group relative"
+    >
+      {/* Main Card Container */}
+      <div 
+        className="relative h-full flex items-center p-5 rounded-lg border transition-all duration-300"
+        style={{
+          backgroundColor: c('--background', '#fff'),
+          borderColor: c('--border', '#e2e8f0'),
+        }}
+      >
+        {/* Hover Effect: Glowing Border */}
+        <div 
+          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+          style={{
+            boxShadow: `inset 0 0 0 1px ${c('--primary', '#3b82f6')}, 0 4px 20px -5px ${c('--primary', '#3b82f6')}30`
+          }}
+        />
+
+        {/* Tech Decor: Corner Markers (The "Unique" HUD look) */}
+        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-slate-300 group-hover:border-blue-500 transition-colors" />
+        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-slate-300 group-hover:border-blue-500 transition-colors" />
+        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-slate-300 group-hover:border-blue-500 transition-colors" />
+        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-slate-300 group-hover:border-blue-500 transition-colors" />
+
+        {/* Icon Section */}
+        <div className="relative mr-5">
+          <div 
+            className="w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+            style={{ 
+              backgroundColor: `${c('--primary', '#3b82f6')}08`, // Very subtle fill
+              border: `1px solid ${c('--primary', '#3b82f6')}20`
+            }}
+          >
+            <badge.icon 
+              className="w-6 h-6 transition-colors duration-300"
+              style={{ color: c('--primary', '#3b82f6') }}
+            />
+          </div>
+          
+          {/* Decorative line connecting icon to text */}
+          <div className="absolute top-1/2 -right-5 w-5 h-[1px] bg-slate-100 group-hover:bg-blue-100 transition-colors" />
+        </div>
+
+        {/* Text Section */}
+        <div className="flex flex-col">
+          <span 
+            className="font-bold text-base tracking-tight mb-0.5"
+            style={{ color: c('--foreground', '#020817') }}
+          >
+            {badge.title}
+          </span>
+          <span 
+            className="text-xs font-medium uppercase tracking-wider opacity-60"
+            style={{ color: c('--muted-foreground', '#64748b') }}
+          >
+            {badge.desc}
+          </span>
+        </div>
+
+        {/* Hover "Active" Indicator Dot */}
+        <div 
+          className="absolute right-3 top-3 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300"
+          style={{ backgroundColor: c('--primary', '#3b82f6') }}
+        />
+      </div>
+    </motion.div>
   )
 }
 

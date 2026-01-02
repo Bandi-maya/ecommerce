@@ -3,21 +3,21 @@
 export type ThemeColor = "red" | "orange" | "green" | "teal" | "blue" | "purple" | "mono";
 export type GradientTheme = "sunset" | "ocean" | "aurora" | "fire" | "forest" | "royal" | "mono";
 
-export interface ThemeConfig {
-  color: ThemeColor;
-  gradient: GradientTheme | null;
-  font: string;
-  fontSizes: {
-    sm: number;
-    base: number;
-    lg: number;
-    xl: number;
-    xl2: number;
-    xl3: number;
-    xl4: number;
-    xl5: number;
-  };
-}
+// export interface ThemeConfig {
+//   color: ThemeColor;
+//   gradient: GradientTheme | null;
+//   font: string;
+//   fontSizes: {
+//     sm: number;
+//     base: number;
+//     lg: number;
+//     xl: number;
+//     xl2: number;
+//     xl3: number;
+//     xl4: number;
+//     xl5: number;
+//   };
+// }
 
 export const DEFAULT_THEME_CONFIG: ThemeConfig = {
   color: "teal",
@@ -33,6 +33,16 @@ export const DEFAULT_THEME_CONFIG: ThemeConfig = {
     xl4: 2.25,
     xl5: 3,
   },
+};
+
+// In your theme-utils.ts, update the ThemeConfig type if needed:
+export type ThemeConfig = {
+  color: ThemeColor;
+  gradient: GradientTheme | null;
+  font: string;
+  fontSizes: {
+    [key: string]: number;
+  };
 };
 
 // Apply theme to DOM
@@ -59,11 +69,14 @@ export function applyTheme(config: Partial<ThemeConfig>): void {
     root.style.setProperty("--font-sans", config.font);
   }
   
-  // Apply font sizes
+  // Apply font sizes (normalize: accept either rem values (e.g., 1.0) or px values (e.g., 16))
   if (config.fontSizes) {
     Object.entries(config.fontSizes).forEach(([key, value]) => {
       const cssVar = getFontSizeCssVar(key);
-      root.style.setProperty(cssVar, `${value}rem`);
+      // If value looks like px (>6), convert to rem (divide by 16). Otherwise treat as rem.
+      const numeric = Number(value);
+      const remValue = Number.isFinite(numeric) ? (numeric > 6 ? numeric / 16 : numeric) : Number(value as any);
+      root.style.setProperty(cssVar, `${remValue}rem`);
     });
   }
   
@@ -118,7 +131,10 @@ export function setPreviewMode(config: Partial<ThemeConfig>): void {
   if (config.fontSizes) {
     Object.entries(config.fontSizes).forEach(([key, value]) => {
       const cssVar = getFontSizeCssVar(key);
-      root.style.setProperty(cssVar, `${value}rem`);
+      // If value looks like px (>6), convert to rem (divide by 16). Otherwise treat as rem.
+      const numeric = Number(value);
+      const remValue = Number.isFinite(numeric) ? (numeric > 6 ? numeric / 16 : numeric) : Number(value as any);
+      root.style.setProperty(cssVar, `${remValue}rem`);
     });
   }
 }
@@ -140,31 +156,61 @@ export function clearPreviewMode(): void {
   });
 }
 
-// Get current theme from localStorage
+// Get current theme from localStorage (normalize legacy px values > 6 to rem)
 export function getCurrentTheme(): ThemeConfig {
   try {
     const color = (localStorage.getItem("theme-color") as ThemeColor) || DEFAULT_THEME_CONFIG.color;
     const gradient = localStorage.getItem("theme-gradient") as GradientTheme || DEFAULT_THEME_CONFIG.gradient;
     const font = localStorage.getItem("theme-font") || DEFAULT_THEME_CONFIG.font;
-    
+
+    const normalize = (raw: string | null, fallback: number) => {
+      const n = parseFloat(raw || String(fallback));
+      if (!Number.isFinite(n)) return fallback;
+      // Treat numeric values > 6 as px and convert to rem
+      return n > 6 ? n / 16 : n;
+    };
+
     return {
       color,
       gradient,
       font,
       fontSizes: {
-        sm: parseFloat(localStorage.getItem("font-size-sm") || DEFAULT_THEME_CONFIG.fontSizes.sm.toString()),
-        base: parseFloat(localStorage.getItem("font-size-base") || DEFAULT_THEME_CONFIG.fontSizes.base.toString()),
-        lg: parseFloat(localStorage.getItem("font-size-lg") || DEFAULT_THEME_CONFIG.fontSizes.lg.toString()),
-        xl: parseFloat(localStorage.getItem("font-size-xl") || DEFAULT_THEME_CONFIG.fontSizes.xl.toString()),
-        xl2: parseFloat(localStorage.getItem("font-size-2xl") || DEFAULT_THEME_CONFIG.fontSizes.xl2.toString()),
-        xl3: parseFloat(localStorage.getItem("font-size-3xl") || DEFAULT_THEME_CONFIG.fontSizes.xl3.toString()),
-        xl4: parseFloat(localStorage.getItem("font-size-4xl") || DEFAULT_THEME_CONFIG.fontSizes.xl4.toString()),
-        xl5: parseFloat(localStorage.getItem("font-size-5xl") || DEFAULT_THEME_CONFIG.fontSizes.xl5.toString()),
+        sm: normalize(localStorage.getItem("font-size-sm"), DEFAULT_THEME_CONFIG.fontSizes.sm),
+        base: normalize(localStorage.getItem("font-size-base"), DEFAULT_THEME_CONFIG.fontSizes.base),
+        lg: normalize(localStorage.getItem("font-size-lg"), DEFAULT_THEME_CONFIG.fontSizes.lg),
+        xl: normalize(localStorage.getItem("font-size-xl"), DEFAULT_THEME_CONFIG.fontSizes.xl),
+        xl2: normalize(localStorage.getItem("font-size-2xl"), DEFAULT_THEME_CONFIG.fontSizes.xl2),
+        xl3: normalize(localStorage.getItem("font-size-3xl"), DEFAULT_THEME_CONFIG.fontSizes.xl3),
+        xl4: normalize(localStorage.getItem("font-size-4xl"), DEFAULT_THEME_CONFIG.fontSizes.xl4),
+        xl5: normalize(localStorage.getItem("font-size-5xl"), DEFAULT_THEME_CONFIG.fontSizes.xl5),
       },
     };
   } catch (error) {
     console.error('Error getting theme from localStorage:', error);
     return DEFAULT_THEME_CONFIG;
+  }
+}
+
+// One-time migration helper: convert any legacy px font-size entries stored in localStorage into rem values
+export function migrateLocalThemeToRem(): boolean {
+  try {
+    let changed = false;
+    Object.entries(DEFAULT_THEME_CONFIG.fontSizes).forEach(([key, fallback]) => {
+      const storageKey = `font-size-${key}`;
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return;
+      const n = parseFloat(raw);
+      if (!Number.isFinite(n)) return;
+      if (n > 6) {
+        const rem = (n / 16).toString();
+        localStorage.setItem(storageKey, rem);
+        changed = true;
+      }
+    });
+    return changed;
+  } catch (error) {
+    console.error('Error migrating theme font sizes in localStorage:', error);
+    return false;
   }
 }
 
@@ -195,7 +241,9 @@ export async function saveThemeToBackend(config: ThemeConfig): Promise<boolean> 
     localStorage.setItem("theme-font", config.font);
     
     Object.entries(config.fontSizes).forEach(([key, value]) => {
-      localStorage.setItem(`font-size-${key}`, value.toString());
+      const numeric = Number(value);
+      const remValue = Number.isFinite(numeric) ? (numeric > 6 ? numeric / 16 : numeric) : Number(value as any);
+      localStorage.setItem(`font-size-${key}`, remValue.toString());
     });
     
     return true;

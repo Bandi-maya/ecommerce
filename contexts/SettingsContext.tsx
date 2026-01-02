@@ -46,8 +46,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       try {
         const res = await apiFetch("/contact");
         setContact(res);
-      } catch (err) {
-        console.error("Failed to load settings", err);
+      } catch (err: any) {
+        console.error("Failed to load settings", err?.message ? `${err.message} (${err.status ?? ''})` : JSON.stringify(err));
       } finally {
         setLoading(false);
       }

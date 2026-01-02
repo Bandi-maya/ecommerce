@@ -63,7 +63,7 @@ const Login = () => {
       // Delay navigation to allow animation to play
       setTimeout(() => {
         router.push("/shop");
-      }, 300); 
+      }, 300);
     } catch (err: any) {
       setGeneralError(err.message || "Invalid credentials. Please try again.");
     }
@@ -72,18 +72,18 @@ const Login = () => {
   // --- Animations ---
   const cardVariants: Variants = {
     initial: { opacity: 0, y: 30, scale: 0.95 },
-    enter: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1, 
-      transition: { type: "spring", stiffness: 260, damping: 24 } 
+    enter: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 260, damping: 24 }
     },
-    exitSuccess: { 
-      opacity: 0, 
-      scale: 1.05, 
+    exitSuccess: {
+      opacity: 0,
+      scale: 1.05,
       y: -20,
       filter: "blur(10px)",
-      transition: { duration: 0.4, ease: "backIn" } 
+      transition: { duration: 0.4, ease: "backIn" }
     },
   };
 
@@ -96,7 +96,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background/95 to-muted/30 p-4">
       <AnimatePresence mode="wait">
         {!success && (
           <motion.div
@@ -105,14 +105,18 @@ const Login = () => {
             initial="initial"
             animate="enter"
             exit="exitSuccess"
-            className="w-full max-w-md bg-card rounded-2xl border border-border/50 shadow-xl overflow-hidden"
+            className="w-full max-w-md bg-card/80 bg-white rounded-2xl border border-border/50 shadow-xl overflow-hidden shadow-black/5"
           >
-            {/* Header */}
-            <div className="px-8 pt-8 pb-6 text-center">
-              <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
-                <LogIn className="w-6 h-6" />
+            {/* Header with subtle gradient */}
+            <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-b from-card to-card/80 border-b border-border/30">
+              <div className="mb-4 flex justify-center">
+                <div className="p-3 rounded-full bg-primary/10">
+                  <Lock className="w-6 h-6 text-primary" />
+                </div>
               </div>
-              <h1 className="text-2xl font-bold tracking-tight">Welcome Back</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                Welcome Back
+              </h1>
               <p className="text-sm text-muted-foreground mt-2">
                 Sign in to access your account
               </p>
@@ -135,10 +139,10 @@ const Login = () => {
               )}
             </AnimatePresence>
 
-            {/* Form */}
+            {/* Form Section */}
             <motion.form
               onSubmit={handleSubmit}
-              className="px-8 pb-8 space-y-5"
+              className="px-8 pb-8 space-y-5 bg-card/60"
               variants={shakeVariants}
               animate={generalError || Object.keys(errors).length > 0 ? "shake" : "idle"}
             >
@@ -153,19 +157,19 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder=" "
-                    className={`peer w-full pl-10 pr-3 pt-5 pb-2 bg-background border-2 rounded-xl outline-none transition-all duration-200
-                      ${errors.email 
-                        ? "border-destructive focus:border-destructive" 
-                        : "border-border/50 focus:border-primary/50 focus:shadow-[0_0_0_4px_rgba(var(--primary),0.1)]"
+                    className={`peer w-full pl-10 pr-3 pt-5 pb-2 bg-background/50 border-2 rounded-xl outline-none transition-all duration-200
+                    ${errors.email
+                        ? "border-destructive focus:border-destructive bg-destructive/5"
+                        : "border-border/50 focus:border-primary focus:shadow-[0_0_0_4px_rgba(var(--primary),0.1)] hover:border-border"
                       }`}
                   />
                   <label
                     htmlFor="email"
                     className={`absolute left-10 top-3.5 text-muted-foreground text-sm transition-all duration-200 origin-[0]
-                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
-                      peer-focus:scale-75 peer-focus:-translate-y-2.5
-                      peer-[:not(:placeholder-shown)]:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-2.5
-                      ${errors.email ? "text-destructive" : ""}`}
+                    peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
+                    peer-focus:scale-75 peer-focus:-translate-y-2.5
+                    peer-[:not(:placeholder-shown)]:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-2.5
+                    ${errors.email ? "text-destructive" : ""}`}
                   >
                     Email Address
                   </label>
@@ -186,23 +190,23 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder=" "
-                    className={`peer w-full pl-10 pr-10 pt-5 pb-2 bg-background border-2 rounded-xl outline-none transition-all duration-200
-                      ${errors.password 
-                        ? "border-destructive focus:border-destructive" 
-                        : "border-border/50 focus:border-primary/50 focus:shadow-[0_0_0_4px_rgba(var(--primary),0.1)]"
+                    className={`peer w-full pl-10 pr-10 pt-5 pb-2 bg-background/50 border-2 rounded-xl outline-none transition-all duration-200
+                    ${errors.password
+                        ? "border-destructive focus:border-destructive bg-destructive/5"
+                        : "border-border/50 focus:border-primary focus:shadow-[0_0_0_4px_rgba(var(--primary),0.1)] hover:border-border"
                       }`}
                   />
                   <label
                     htmlFor="password"
                     className={`absolute left-10 top-3.5 text-muted-foreground text-sm transition-all duration-200 origin-[0]
-                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
-                      peer-focus:scale-75 peer-focus:-translate-y-2.5
-                      peer-[:not(:placeholder-shown)]:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-2.5
-                      ${errors.password ? "text-destructive" : ""}`}
+                    peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
+                    peer-focus:scale-75 peer-focus:-translate-y-2.5
+                    peer-[:not(:placeholder-shown)]:scale-75 peer-[:not(:placeholder-shown)]:-translate-y-2.5
+                    ${errors.password ? "text-destructive" : ""}`}
                   >
                     Password
                   </label>
-                  
+
                   <button
                     type="button"
                     onClick={() => setShowPwd(!showPwd)}
@@ -218,9 +222,9 @@ const Login = () => {
 
               {/* Submit Button */}
               <motion.div whileTap={{ scale: 0.98 }}>
-                <Button 
-                  type="submit" 
-                  className="w-full h-12 text-base font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/20" 
+                <Button
+                  type="submit"
+                  className="w-full h-12 text-base font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 bg-primary hover:bg-primary/90"
                   disabled={loading}
                 >
                   {loading ? (
@@ -236,11 +240,11 @@ const Login = () => {
             </motion.form>
 
             {/* Footer */}
-            <div className="bg-muted/30 p-4 text-center border-t border-border/50">
+            <div className="bg-muted/20 p-4 text-center border-t border-border/30">
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{" "}
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="text-primary font-semibold hover:underline decoration-2 underline-offset-4 transition-all"
                 >
                   Create account

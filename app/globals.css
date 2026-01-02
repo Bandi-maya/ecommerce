@@ -190,7 +190,7 @@
     --border: hsl(var(--color-border));
     --input: hsl(var(--color-input));
     --ring: hsl(var(--color-ring));
-    
+      
     /* Semantic */
     --success: hsl(var(--color-success));
     --success-foreground: hsl(var(--color-success-fg));

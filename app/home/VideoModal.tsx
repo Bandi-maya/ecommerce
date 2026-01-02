@@ -6,13 +6,85 @@ interface VideoModalProps {
   show: boolean
   onClose: () => void
   getCSSVar: (varName: string, fallback?: string) => string
+  src?: string
 }
 
-const VideoModal = ({ show, onClose, getCSSVar }: VideoModalProps) => {
+const toEmbedUrl = (url: string) => {
+  try {
+    if (url.includes('youtu.be/')) {
+      return url.replace('youtu.be/', 'www.youtube.com/embed/');
+    }
+    if (url.includes('watch?v=')) {
+      return url.replace('watch?v=', 'embed/');
+    }
+    return url;
+  } catch (e) {
+    return url;
+  }
+}
+
+const VideoModal = ({ show, onClose, getCSSVar, src }: VideoModalProps) => {
   if (!show) return null
 
   const cssVars = {
     foreground: () => getCSSVar('--foreground', '#020817'),
+  }
+
+  const renderMedia = () => {
+    if (src) {
+      const trimmed = src.trim();
+      // MP4 / local file
+      if (/\.mp4(\?.*)?$/.test(trimmed)) {
+        return (
+          <video className="w-full h-full object-cover" controls autoPlay src={trimmed} />
+        );
+      }
+
+      // Remote URL (YouTube or other)
+      if (/^https?:\/\//.test(trimmed) || trimmed.includes('youtube') || trimmed.includes('youtu.be')) {
+        const embed = toEmbedUrl(trimmed);
+        return (
+          <iframe
+            width="100%"
+            height="100%"
+            src={embed}
+            title="Video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="rounded-lg sm:rounded-xl"
+          />
+        );
+      }
+
+      // Fallback: try as iframe
+      return (
+        <iframe
+          width="100%"
+          height="100%"
+          src={trimmed}
+          title="Video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="rounded-lg sm:rounded-xl"
+        />
+      );
+    }
+
+    // Default embedded YouTube
+    return (
+      <iframe
+        width="100%"
+        height="100%"
+        src="https://www.youtube.com/embed/OXHTlMPbX7o"
+        title="YouTube video player"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="rounded-lg sm:rounded-xl"
+      />
+    );
   }
 
   return (
@@ -43,16 +115,7 @@ const VideoModal = ({ show, onClose, getCSSVar }: VideoModalProps) => {
           </button>
         </div>
         <div className="aspect-video w-full rounded-xl sm:rounded-2xl overflow-hidden border border-gray-300">
-          <iframe
-            width="100%"
-            height="100%"
-            src="https://youtu.be/OXHTlMPbX7o?si=60qf-kkaTJHjyCj_"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="rounded-lg sm:rounded-xl"
-          />
+          {renderMedia()}
         </div>
       </motion.div>
     </motion.div>

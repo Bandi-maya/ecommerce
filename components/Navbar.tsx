@@ -43,8 +43,6 @@ const Navbar = ({ onLanguageToggle }: NavbarProps) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { contact } = useSettings()
 
-  console.log("Contact Info:", contact);
-
   const pathname = usePathname();
   const router = useRouter();
   const { cartItems } = useCart();
@@ -159,18 +157,26 @@ const Navbar = ({ onLanguageToggle }: NavbarProps) => {
               onClick={() => setIsOpen(false)}
             >
               {contact?.logo_url ? (
-                <img
-                  src={'http://49.50.83.49' + contact?.logo_url}
-                  alt="Logo"
-                  width={140}
-                  height={40}
-                  className="px-[12px] object-contain transition-opacity duration-300 group-hover:opacity-90"
-                />) : (
+                <div className="flex items-center gap-2">
+                  {/* Circle logo container (fixed pixel sizes so it doesn't scale with global font-size) */}
+                  <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px] overflow-hidden rounded-full border-2 border-white shadow-sm flex-shrink-0">
+                    <img
+                      src={'http://49.50.83.49' + contact?.logo_url}
+                      alt="Logo"
+                      className="w-full h-full object-contain"
+                      style={{ display: 'block', maxWidth: '48px', maxHeight: '48px', width: '48px', height: '48px', objectFit: 'contain' }}
+                    />
+                  </div>
+                  {/* Optional brand name (cap width and prevent overflow) */}
+                  <span className="text-[18px] md:text-[22px] font-bold text-gray-900 hidden md:inline-block max-w-[160px] truncate leading-none site-brand">
+                    STEM<span className="text-accent">PARK</span>
+                  </span>
+                </div>
+              ) : (
                 <span className="text-2xl md:text-3xl font-extrabold tracking-tight">
                   <span className="text-primary">STEM</span>
                   <span className="text-accent">PARK</span>
                 </span>
-
               )}
             </Link>
 

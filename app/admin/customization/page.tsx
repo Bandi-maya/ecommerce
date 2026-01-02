@@ -32,6 +32,9 @@ import {
   Layers,
   Grid3x3,
   Sparkles,
+  ChevronDown,
+  Minus,
+  Plus,
 } from "lucide-react";
 import { apiFetch } from "@/lib/axios";
 
@@ -172,12 +175,120 @@ const gradientThemes = [
   },
 ];
 
-/* ---------- TYPOGRAPHY OPTIONS ---------- */
-const fontOptions = [
-  { key: "inter", name: "Inter", value: "'Inter', ui-sans-serif, system-ui, sans-serif", preview: "Aa" },
-  { key: "mono", name: "JetBrains Mono", value: "'JetBrains Mono', ui-monospace, monospace", preview: "<>{}" },
-  { key: "serif", name: "Georgia", value: "Georgia, serif", preview: "Aa" },
-  { key: "system", name: "System Default", value: "system-ui, -apple-system, sans-serif", preview: "Aa" },
+/* ---------- PROFESSIONAL FONT OPTIONS ---------- */
+const professionalFonts = [
+  {
+    key: "inter",
+    name: "Inter",
+    value: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "sf-pro",
+    name: "SF Pro",
+    value: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "helvetica",
+    name: "Helvetica Neue",
+    value: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "montserrat",
+    name: "Montserrat",
+    value: "'Montserrat', 'Segoe UI', sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "poppins",
+    name: "Poppins",
+    value: "'Poppins', 'Segoe UI', sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "roboto",
+    name: "Roboto",
+    value: "'Roboto', 'Segoe UI', sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "open-sans",
+    name: "Open Sans",
+    value: "'Open Sans', 'Segoe UI', sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "lato",
+    name: "Lato",
+    value: "'Lato', 'Segoe UI', sans-serif",
+    category: "Sans-serif",
+    preview: "Aa"
+  },
+  {
+    key: "georgia",
+    name: "Georgia",
+    value: "Georgia, 'Times New Roman', serif",
+    category: "Serif",
+    preview: "Aa"
+  },
+  {
+    key: "playfair",
+    name: "Playfair Display",
+    value: "'Playfair Display', Georgia, serif",
+    category: "Serif",
+    preview: "Aa"
+  },
+  {
+    key: "merriweather",
+    name: "Merriweather",
+    value: "'Merriweather', Georgia, serif",
+    category: "Serif",
+    preview: "Aa"
+  },
+  {
+    key: "jetbrains",
+    name: "JetBrains Mono",
+    value: "'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace",
+    category: "Monospace",
+    preview: "<>{}"
+  },
+  {
+    key: "cascadia",
+    name: "Cascadia Code",
+    value: "'Cascadia Code', 'Consolas', 'Monaco', monospace",
+    category: "Monospace",
+    preview: "<>{}"
+  },
+  {
+    key: "fira-code",
+    name: "Fira Code",
+    value: "'Fira Code', 'Consolas', 'Monaco', monospace",
+    category: "Monospace",
+    preview: "<>{}"
+  },
+  {
+    key: "source-code-pro",
+    name: "Source Code Pro",
+    value: "'Source Code Pro', 'Consolas', monospace",
+    category: "Monospace",
+    preview: "<>{}"
+  },
+  {
+    key: "system",
+    name: "System Default",
+    value: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    category: "System",
+    preview: "Aa"
+  },
 ];
 
 /* ---------- PRESET THEMES ---------- */
@@ -189,7 +300,7 @@ const presetThemes = [
     config: {
       color: "purple" as ThemeColor,
       gradient: "royal" as GradientTheme,
-      font: "'Inter', ui-sans-serif, system-ui, sans-serif",
+      font: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
       fontSizes: DEFAULT_THEME_CONFIG.fontSizes,
     },
     isPreset: true,
@@ -203,7 +314,7 @@ const presetThemes = [
     config: {
       color: "orange" as ThemeColor,
       gradient: "sunset" as GradientTheme,
-      font: "'Inter', ui-sans-serif, system-ui, sans-serif",
+      font: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
       fontSizes: DEFAULT_THEME_CONFIG.fontSizes,
     },
     isPreset: true,
@@ -216,7 +327,7 @@ const presetThemes = [
     config: {
       color: "blue" as ThemeColor,
       gradient: "ocean" as GradientTheme,
-      font: "'Inter', ui-sans-serif, system-ui, sans-serif",
+      font: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
       fontSizes: DEFAULT_THEME_CONFIG.fontSizes,
     },
     isPreset: true,
@@ -229,7 +340,7 @@ const presetThemes = [
     config: {
       color: "green" as ThemeColor,
       gradient: "forest" as GradientTheme,
-      font: "'Inter', ui-sans-serif, system-ui, sans-serif",
+      font: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
       fontSizes: DEFAULT_THEME_CONFIG.fontSizes,
     },
     isPreset: true,
@@ -242,7 +353,7 @@ const presetThemes = [
     config: {
       color: "mono" as ThemeColor,
       gradient: "mono" as GradientTheme,
-      font: "'Inter', ui-sans-serif, system-ui, sans-serif",
+      font: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
       fontSizes: DEFAULT_THEME_CONFIG.fontSizes,
     },
     isPreset: true,
@@ -264,18 +375,23 @@ export default function ThemeCustomizationPage() {
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [fontSizePreview, setFontSizePreview] = useState("The quick brown fox jumps over the lazy dog.");
+  const [selectedFont, setSelectedFont] = useState(professionalFonts[0]);
+  const [showFontDropdown, setShowFontDropdown] = useState(false);
+  const [baseFontSize, setBaseFontSize] = useState(16);
+  const [fontSizes, setFontSizes] = useState(DEFAULT_THEME_CONFIG.fontSizes);
 
-  // Load custom themes from localStorage on mount
-  // useEffect(() => {
-  //   const savedThemes = localStorage.getItem("custom-themes");
-  //   if (savedThemes) {
-  //     try {
-  //       setCustomThemes(JSON.parse(savedThemes));
-  //     } catch (error) {
-  //       console.error("Error loading custom themes:", error);
-  //     }
-  //   }
-  // }, []);
+  // Initialize from current theme (convert rem -> px for internal baseFontSize)
+  useEffect(() => {
+    if (currentTheme) {
+      const currentFont = professionalFonts.find(f => f.value === currentTheme.font) || professionalFonts[0];
+      setSelectedFont(currentFont);
+      const baseRem = Number(currentTheme.fontSizes.base) || DEFAULT_THEME_CONFIG.fontSizes.base;
+      const basePx = Math.round(baseRem * 16);
+      setBaseFontSize(clampBase(basePx));
+      // Keep a record of fontSizes in rem for state
+      setFontSizes(Object.fromEntries(Object.entries(currentTheme.fontSizes).map(([k, v]) => [k, Number(v)])) as any);
+    }
+  }, [currentTheme]);
 
   // Keep draft theme in sync with the active theme when in select mode
   useEffect(() => {
@@ -283,6 +399,66 @@ export default function ThemeCustomizationPage() {
       setDraftTheme(currentTheme);
     }
   }, [currentTheme, mode]);
+
+  // Calculate font sizes based on base size
+  const calculateFontSizes = (base: number) => {
+    const multiplier = base / 16; // Normalize to 16px base
+
+    // Create font sizes object matching the ThemeConfig type
+    const calculatedFontSizes = {
+      sm: Math.round(14 * multiplier),
+      base: base,
+      lg: Math.round(18 * multiplier),
+      xl: Math.round(20 * multiplier),
+      xl2: Math.round(24 * multiplier),
+      xl3: Math.round(30 * multiplier),
+      xl4: Math.round(36 * multiplier),
+      xl5: Math.round(48 * multiplier),
+    };
+
+    return calculatedFontSizes;
+  };
+
+  // Dynamic limits based on the draft theme's original base font size (origin in rem -> px conversion)
+  const getBaseLimits = () => {
+    const originRem = (draftTheme && draftTheme.fontSizes && Number(draftTheme.fontSizes.base)) || DEFAULT_THEME_CONFIG.fontSizes.base;
+    const originPx = Math.round(originRem * 16);
+    const min = Math.max(6, originPx - 5);
+    const max = Math.round(originPx + 10);
+    return { origin: originPx, min, max };
+  };
+
+  const clampBase = (v: number) => {
+    const { min, max } = getBaseLimits();
+    return Math.max(min, Math.min(max, Math.round(v)));
+  };
+
+  const changeBaseFontSize = (delta: number) => {
+    setBaseFontSize((prev) => {
+      const n = Number(prev);
+      const current = Number.isFinite(n) ? n : getBaseLimits().origin;
+      return clampBase(current + delta);
+    });
+  };
+
+  // Update draft theme when font changes (convert px -> rem for theme config)
+  useEffect(() => {
+    if (draftTheme) {
+      const updatedFontSizesPx = calculateFontSizes(baseFontSize); // returns px numbers
+      // convert px values to rem values for theme config
+      const updatedFontSizesRem = Object.fromEntries(
+        Object.entries(updatedFontSizesPx).map(([k, v]) => [k, Number((Number(v) / 16).toFixed(3))])
+      );
+
+      const updatedTheme = {
+        ...draftTheme,
+        font: selectedFont.value,
+        fontSizes: updatedFontSizesRem as any
+      };
+      setDraftTheme(updatedTheme);
+      setFontSizes(updatedFontSizesPx as any); // keep px values for local display
+    }
+  }, [selectedFont, baseFontSize]);
 
   // Update preview when draft theme changes
   useEffect(() => {
@@ -305,33 +481,6 @@ export default function ThemeCustomizationPage() {
   };
 
   // Apply theme
-  // const handleApplyTheme = async (themeToApply?: ThemeConfig) => {
-  //   const finalTheme = themeToApply || draftTheme;
-
-  //   if (!finalTheme) {
-  //     setDialog({ type: "error", message: "No theme configuration to apply." });
-  //     return;
-  //   }
-
-  //   try {
-  //     setIsSaving(true);
-  //     clearPreviewMode();
-  //     setShowPreview(false);
-
-  //     await setTheme(finalTheme);
-
-  //     setDialog({
-  //       type: "success",
-  //       message: "Theme applied successfully across the entire website."
-  //     });
-  //     setTimeout(() => setDialog(null), 3000);
-  //   } catch (error) {
-  //     console.error("Error applying theme:", error);
-  //     setDialog({ type: "error", message: "Failed to apply theme." });
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // };
   const handleApplyTheme = async (themeToApply?: ThemeConfig) => {
     const finalTheme = themeToApply || draftTheme;
     if (!finalTheme) return;
@@ -339,9 +488,8 @@ export default function ThemeCustomizationPage() {
     try {
       setIsSaving(true);
 
-      // 1. Try to update backend if available, but don't fail the whole flow if API is missing
+      // 1. Try to update backend if available
       try {
-        // Attempt to persist theme on the server if an API exists
         if (!customThemes[0]?.id) {
           await apiFetch("/themes", {
             method: "PUT",
@@ -354,11 +502,10 @@ export default function ThemeCustomizationPage() {
           });
         }
       } catch (apiError) {
-        // API not available or failed — log and continue by applying locally
-        console.warn("Themes API unavailable or failed; applying locally.", apiError);
+        console.warn("Themes API unavailable; applying locally.", apiError);
       }
 
-      // 2. Update the local Context state (always required)
+      // 2. Update the local Context state
       await setTheme(finalTheme);
 
       setDialog({ type: "success", message: "Theme applied and saved to profile!" });
@@ -372,45 +519,6 @@ export default function ThemeCustomizationPage() {
   };
 
   // Save custom theme
-  // const handleSaveCustomTheme = () => {
-  //   if (!themeName.trim()) {
-  //     setDialog({ type: "error", message: "Please enter a name for your theme." });
-  //     return;
-  //   }
-  //   if (!draftTheme) return;
-
-  //   // Get matching colors for preview
-  //   const solidTheme = solidThemes.find(t => t.key === draftTheme.color);
-  //   const gradientTheme = gradientThemes.find(t => t.key === draftTheme.gradient);
-
-  //   const previewColors = gradientTheme
-  //     ? getGradientColors(gradientTheme.preview)
-  //     : solidTheme
-  //       ? [solidTheme.lightPreview, solidTheme.preview, solidTheme.darkPreview]
-  //       : ["#F1F5F9", "#3B82F6", "#64748B"];
-
-  //   const newTheme = {
-  //     id: `custom-${Date.now()}`,
-  //     name: themeName,
-  //     description: themeDescription,
-  //     config: draftTheme,
-  //     isPreset: false,
-  //     createdAt: new Date().toISOString(),
-  //     previewColors,
-  //     matchesColor: gradientTheme?.color || draftTheme.color
-  //   };
-
-  //   const updatedThemes = [...customThemes, newTheme];
-  //   setCustomThemes(updatedThemes);
-  //   localStorage.setItem("custom-themes", JSON.stringify(updatedThemes));
-
-  //   setThemeName("");
-  //   setThemeDescription("");
-  //   setShowSaveDialog(false);
-
-  //   setDialog({ type: "success", message: `"${themeName}" saved as a custom theme!` });
-  //   setTimeout(() => setDialog(null), 3000);
-  // };
   const handleSaveCustomTheme = async () => {
     if (!themeName.trim()) {
       setDialog({ type: "error", message: "Please enter a name for your theme." });
@@ -421,11 +529,10 @@ export default function ThemeCustomizationPage() {
     try {
       setIsSaving(true);
 
-      // Prepare data for the POST /api/themes route
       const payload = {
         name: themeName,
         config: draftTheme,
-        isPublic: true, // You can toggle this based on a checkbox
+        isPublic: true,
       };
 
       const savedTheme = await apiFetch("/themes", {
@@ -433,7 +540,6 @@ export default function ThemeCustomizationPage() {
         data: payload
       });
 
-      // Update local state with the database response
       setCustomThemes([savedTheme, ...customThemes]);
 
       setThemeName("");
@@ -456,19 +562,10 @@ export default function ThemeCustomizationPage() {
   };
 
   // Delete custom theme
-  // const handleDeleteCustomTheme = (themeId: string) => {
-  //   const updatedThemes = customThemes.filter(theme => theme.id !== themeId);
-  //   setCustomThemes(updatedThemes);
-  //   localStorage.setItem("custom-themes", JSON.stringify(updatedThemes));
-  //   setDialog({ type: "success", message: "Theme deleted successfully!" });
-  //   setTimeout(() => setDialog(null), 3000);
-  // };
-
   const handleDeleteCustomTheme = async (themeId: string) => {
     try {
       setIsSaving(true);
 
-      // Calls DELETE /api/themes?id=...
       await apiFetch(`/themes?id=${themeId}`, {
         method: "DELETE"
       });
@@ -489,6 +586,10 @@ export default function ThemeCustomizationPage() {
   const handleLoadPreset = (preset: any) => {
     setSelectedPreset(preset.id);
     setDraftTheme(preset.config);
+    const presetFont = professionalFonts.find(f => f.value === preset.config.font) || professionalFonts[0];
+    setSelectedFont(presetFont);
+    setBaseFontSize(preset.config.fontSizes.base);
+    setFontSizes(preset.config.fontSizes);
     setShowPreview(true);
   };
 
@@ -501,6 +602,9 @@ export default function ThemeCustomizationPage() {
 
       await resetThemeContext();
       setDraftTheme(DEFAULT_THEME_CONFIG);
+      setSelectedFont(professionalFonts[0]);
+      setBaseFontSize(DEFAULT_THEME_CONFIG.fontSizes.base);
+      setFontSizes(DEFAULT_THEME_CONFIG.fontSizes);
 
       setDialog({ type: 'success', message: 'Theme has been reset to default.' });
       setTimeout(() => setDialog(null), 3000);
@@ -539,12 +643,12 @@ export default function ThemeCustomizationPage() {
   useEffect(() => {
     const loadThemes = async () => {
       try {
-        // Fetches themes from your /api/themes route
         const themes = await apiFetch("/themes");
-        setCustomThemes(themes);
+        if (Array.isArray(themes)) {
+          setCustomThemes(themes);
+        }
       } catch (error: any) {
-        console.error("Error loading custom themes:", error);
-        setDialog({ type: "error", message: error.message || "Failed to load themes" });
+        console.warn("Error loading custom themes:", error);
       }
     };
 
@@ -569,8 +673,7 @@ export default function ThemeCustomizationPage() {
     );
   }
 
-  const { color: selectedColor, gradient: selectedGradient, font: selectedFontValue, fontSizes } = draftTheme;
-  const selectedFontKey = fontOptions.find(f => f.value === selectedFontValue)?.key || 'inter';
+  const { color: selectedColor, gradient: selectedGradient } = draftTheme;
   const matchingGradients = getMatchingGradients(selectedColor);
   const selectedSolidTheme = solidThemes.find(t => t.key === selectedColor);
   const selectedGradientTheme = gradientThemes.find(t => t.key === selectedGradient);
@@ -621,7 +724,6 @@ export default function ThemeCustomizationPage() {
               { key: "color" as const, label: "Colors", icon: Palette },
               { key: "gradient" as const, label: "Gradients", icon: Layers },
               { key: "typography" as const, label: "Typography", icon: Type },
-              // { key: "custom" as const, label: "Custom Builder", icon: Brush },
             ].map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
@@ -753,14 +855,6 @@ export default function ThemeCustomizationPage() {
                   Manage and apply your saved custom themes
                 </p>
               </div>
-
-              {/* <button
-                onClick={() => setMode("custom")}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
-              >
-                <Brush className="w-4 h-4" />
-                <span className="text-sm">Create New</span>
-              </button> */}
             </div>
 
             {customThemes.length > 0 ? (
@@ -1097,113 +1191,62 @@ export default function ThemeCustomizationPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* Font Family */}
+              {/* Font Family Selector */}
               <div>
                 <h3 className="text-lg font-semibold mb-4">Font Family</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  {fontOptions.map(({ key, name, value, preview }) => (
-                    <motion.button
-                      key={key}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleUpdateDraft({ font: value })}
-                      className={`p-4 rounded-xl border transition-all text-left min-h-[120px] ${selectedFontKey === key
-                        ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
-                        : 'border-border hover:border-primary/40 hover:bg-secondary'
-                        }`}
-                      style={{ fontFamily: value }}
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <div className="text-2xl font-bold mb-2">{preview}</div>
-                          <div className="text-sm font-medium">{name}</div>
-                        </div>
-                        {selectedFontKey === key && (
-                          <div className="p-1.5 rounded-full bg-primary text-primary-foreground">
-                            <Check className="w-3 h-3" />
-                          </div>
-                        )}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowFontDropdown(!showFontDropdown)}
+                    className="w-full px-4 py-3.5 rounded-xl border border-border bg-white hover:border-primary/40 transition-colors flex items-center justify-between group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-lg bg-primary/10">
+                        <Type className="w-5 h-5 text-primary" />
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {fontSizePreview}
-                      </p>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Font Sizes */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Font Sizes</h3>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={fontSizePreview}
-                      onChange={(e) => setFontSizePreview(e.target.value)}
-                      placeholder="Type preview text..."
-                      className="px-3 py-1.5 text-sm rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary max-w-[200px]"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-5">
-                  {[
-                    { key: 'xs', label: 'Extra Small', min: 10, max: 14, step: 0.5 },
-                    { key: 'sm', label: 'Small', min: 12, max: 16, step: 0.5 },
-                    { key: 'base', label: 'Base', min: 14, max: 20, step: 0.5 },
-                    { key: 'lg', label: 'Large', min: 16, max: 24, step: 0.5 },
-                    { key: 'xl', label: 'Extra Large', min: 18, max: 32, step: 0.5 },
-                  ].map(({ key, label, min, max, step }) => (
-                    <div key={key} className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="text-sm font-medium">{label}</span>
-                          <span className="text-xs text-muted-foreground ml-2">
-                            {fontSizes[key as keyof typeof fontSizes]}px
-                          </span>
-                        </div>
-                        <div
-                          className="text-sm px-3 py-1 rounded-md bg-secondary"
-                          style={{
-                            fontSize: `${fontSizes[key as keyof typeof fontSizes]}px`,
-                            fontFamily: selectedFontValue
-                          }}
-                        >
-                          Aa
-                        </div>
-                      </div>
-                      <div className="relative">
-                        <input
-                          type="range"
-                          min={min}
-                          max={max}
-                          step={step}
-                          value={fontSizes[key as keyof typeof fontSizes]}
-                          onChange={(e) => {
-                            const newFontSizes = {
-                              ...fontSizes,
-                              [key]: parseFloat(e.target.value)
-                            };
-                            handleUpdateDraft({ fontSizes: newFontSizes });
-                          }}
-                          className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer 
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:h-5 
-                            [&::-webkit-slider-thumb]:w-5 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:bg-primary
-                            [&::-webkit-slider-thumb]:border-2
-                            [&::-webkit-slider-thumb]:border-background
-                            [&::-webkit-slider-thumb]:shadow-lg"
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                          <span>{min}px</span>
-                          <span>{max}px</span>
-                        </div>
+                      <div className="text-left">
+                        <div className="font-medium">{selectedFont.name}</div>
+                        <div className="text-xs text-muted-foreground capitalize">{selectedFont.category}</div>
                       </div>
                     </div>
-                  ))}
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${showFontDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {showFontDropdown && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-auto rounded-xl border border-border bg-white shadow-xl z-50"
+                      >
+                        {professionalFonts.map((font) => (
+                          <button
+                            key={font.key}
+                            onClick={() => {
+                              setSelectedFont(font);
+                              setShowFontDropdown(false);
+                            }}
+                            className={`w-full px-4 py-3 flex items-center justify-between hover:bg-secondary transition-colors ${selectedFont.key === font.key ? 'bg-primary/10' : ''
+                              }`}
+                            style={{ fontFamily: font.value }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                                <span className="text-sm font-medium">{font.preview}</span>
+                              </div>
+                              <div className="text-left">
+                                <div className="font-medium">{font.name}</div>
+                                <div className="text-xs text-muted-foreground capitalize">{font.category}</div>
+                              </div>
+                            </div>
+                            {selectedFont.key === font.key && (
+                              <Check className="w-4 h-4 text-primary" />
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -1212,10 +1255,10 @@ export default function ThemeCustomizationPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-foreground">
-                    Font: {fontOptions.find(f => f.key === selectedFontKey)?.name}
+                    Font: {selectedFont.name}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Preview text updates in real-time
+                    Base Size: {baseFontSize}px
                   </p>
                 </div>
 
@@ -1249,7 +1292,6 @@ export default function ThemeCustomizationPage() {
           </div>
         </div>
       )}
-
       {/* Custom Theme Mode */}
       {mode === "custom" && (
         <div className="space-y-8">
@@ -1294,9 +1336,9 @@ export default function ThemeCustomizationPage() {
                         <div className="font-medium">Typography</div>
                         <div
                           className="text-sm text-muted-foreground"
-                          style={{ fontFamily: selectedFontValue }}
+                          style={{ fontFamily: selectedFont.value }}
                         >
-                          {fontOptions.find(f => f.key === selectedFontKey)?.name}
+                          {selectedFont.name} • {baseFontSize}px
                         </div>
                       </div>
                     </div>
@@ -1307,13 +1349,13 @@ export default function ThemeCustomizationPage() {
                     <h4 className="text-sm font-medium mb-3">Live Preview</h4>
                     <div
                       className="text-sm p-3 rounded-lg bg-background border border-border min-h-[100px]"
-                      style={{ fontFamily: selectedFontValue }}
+                      style={{ fontFamily: selectedFont.value }}
                     >
                       <p style={{ fontSize: `${fontSizes.base}px` }} className="mb-2">
                         This is how your text will appear with the current settings.
                       </p>
                       <p style={{ fontSize: `${fontSizes.sm}px` }} className="text-muted-foreground">
-                        The quick brown fox jumps over the lazy dog.
+                        {fontSizePreview}
                       </p>
                     </div>
                   </div>
@@ -1477,6 +1519,36 @@ export default function ThemeCustomizationPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style jsx>{`
+        .slider-thumb {
+          -webkit-appearance: none;
+          height: 8px;
+          background: linear-gradient(to right, var(--muted) 0%, var(--primary) ${(baseFontSize - 10) / (25 - 10) * 100}%, var(--muted) ${(baseFontSize - 10) / (25 - 10) * 100}%);
+        }
+        
+        .slider-thumb::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: var(--primary);
+          cursor: pointer;
+          border: 3px solid white;
+          box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
+        }
+        
+        .slider-thumb::-moz-range-thumb {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: var(--primary);
+          cursor: pointer;
+          border: 3px solid white;
+          box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
+        }
+      `}</style>
     </div>
   );
 }

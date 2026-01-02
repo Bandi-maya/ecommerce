@@ -420,30 +420,37 @@ const BackgroundDecorations = ({
           {/* Glow Effects */}
           <GlowEffect position="center" />
 
-          {/* Enhanced Floating Particles */}
+          {/* Enhanced Floating Particles (deterministic) */}
           <div className="absolute inset-0">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: currentOpacity * 0.4, scale: 1 }}
-                transition={{
-                  duration: prefersReducedMotion ? 0 : 0.8,
-                  delay: i * 0.1,
-                  repeat: prefersReducedMotion ? 0 : Infinity,
-                  repeatType: "reverse",
-                  repeatDelay: prefersReducedMotion ? 0 : Math.random() * 3 + 2
-                }}
-                className="absolute rounded-full will-change-transform"
-                style={{
-                  backgroundColor: color,
-                  width: Math.random() * 3 + 1,
-                  height: Math.random() * 3 + 1,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-              />
-            ))}
+            {Array.from({ length: 8 }).map((_, i) => {
+              const size = (i % 3) + 1
+              const left = ((i * 41) % 100) + 0.5
+              const top = ((i * 29) % 100) + 0.5
+              const repeatDelay = ((i % 5) * 0.6) + 1.2
+
+              return (
+                <motion.div
+                  key={`enhanced-particle-${i}`}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: currentOpacity * 0.4, scale: 1 }}
+                  transition={{
+                    duration: prefersReducedMotion ? 0 : 0.8,
+                    delay: i * 0.1,
+                    repeat: prefersReducedMotion ? 0 : Infinity,
+                    repeatType: "reverse",
+                    repeatDelay: prefersReducedMotion ? 0 : repeatDelay
+                  }}
+                  className="absolute rounded-full will-change-transform"
+                  style={{
+                    backgroundColor: color,
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    left: `${left}%`,
+                    top: `${top}%`,
+                  }}
+                />
+              )
+            })}
           </div>
         </div>
 

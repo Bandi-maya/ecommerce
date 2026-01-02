@@ -8,6 +8,7 @@ import {
   applyTheme as applyThemeUtil,
   resetTheme as resetThemeUtil,
   getCurrentTheme,
+  migrateLocalThemeToRem,
   saveThemeToBackend,
 } from '@/lib/theme-utils';
 
@@ -44,6 +45,13 @@ export function ThemeProvider({
   // Sync with LocalStorage/Cookies if no initialTheme was provided
   useEffect(() => {
     if (!initialTheme) {
+      // Migrate any legacy px-based font sizes to rem once
+      try {
+        migrateLocalThemeToRem();
+      } catch (err) {
+        console.warn('Migration of local theme values failed:', err);
+      }
+
       const savedTheme = getCurrentTheme();
       setThemeState(savedTheme);
       setIsLoading(false);

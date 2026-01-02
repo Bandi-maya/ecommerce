@@ -93,78 +93,34 @@ const FeaturedProducts = ({ getCSSVar, isMobile }: FeaturedProductsProps) => {
 
       <div className="container relative z-10 px-4 mx-auto">
         {/* Header Section */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="text-center max-w-3xl mx-auto mb-16 sm:mb-20 md:mb-24"
-        >
-          {/* Accent line and label */}
-          <div className="flex justify-center items-center gap-3 mb-4">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.8 }}
+            viewport={{ once: true }}
+            className="flex justify-center items-center gap-3 mb-6"
+          >
             <motion.div
               initial={{ width: 0 }}
-              whileInView={{ width: '40px' }}
+              whileInView={{ width: '48px' }}
               transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="h-[2px] bg-accent"
+              className="h-[2px]"
+              style={{ backgroundColor: `var(--accent)` }}
             />
-            <span className="text-sm sm:text-base font-semibold uppercase tracking-wider text-accent">
-              Featured
+            <span 
+              className="text-xs font-bold uppercase tracking-widest"
+              style={{ color: `var(--accent)` }}
+            >
+              FEATURED
             </span>
             <motion.div
               initial={{ width: 0 }}
-              whileInView={{ width: '40px' }}
+              whileInView={{ width: '48px' }}
               transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="h-[2px] bg-accent"
+              className="h-[2px]"
+              style={{ backgroundColor: `var(--accent)` }}
             />
-          </div>
-
-          {/* Title */}
-          <h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight"
-            style={{
-              color: cssVars.foreground(),
-              fontFamily: cssVars.fontDisplay()
-            }}
-          >
-            <motion.span
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="block"
-            >
-              Explore STEM products & programs
-            </motion.span>
-            <motion.span
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="block bg-clip-text text-transparent"
-              style={{
-                backgroundImage: `linear-gradient(135deg, ${cssVars.accent()} 0%, ${cssVars.primary()} 100%)`,
-                WebkitBackgroundClip: 'text',
-              }}
-            >
-              Find kits & learning resources
-            </motion.span>
-          </h2>
-
-          {/* Description */}
-          <motion.p
-            className="text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed"
-            style={{ color: cssVars.mutedForeground() }}
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            Discover curated kits and programs designed to inspire hands-on learning.
-          </motion.p>
-        </motion.div>
+          </motion.div>
 
         {/* Product Grid */}
         <div className="flex justify-center px-2 sm:px-4">
