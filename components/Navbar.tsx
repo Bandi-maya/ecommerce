@@ -124,8 +124,8 @@ const Navbar = ({ onLanguageToggle }: NavbarProps) => {
     { label: "Home", path: "/", icon: <Home className="w-5 h-5" /> },
     { label: "Shop", path: "/shop", icon: <Store className="w-5 h-5" /> },
     {
-      label: "Programs",
-      path: "/programs",
+      label: "Cources",
+      path: "/courses",
       icon: <Layers className="w-5 h-5" />,
     },
     {
@@ -408,8 +408,8 @@ const Navbar = ({ onLanguageToggle }: NavbarProps) => {
         </div>
       </nav>
 
-      {/* Spacer to prevent content overlap with fixed navbar + 10px gap */}
-      <div className="h-16 md:h-20 box-content pb-[10px]" />
+      {/* Spacer to prevent content overlap with fixed navbar */}
+      <div aria-hidden="true" className="h-16 md:h-20" />
 
       <style jsx global>{`
         @keyframes fadeIn {

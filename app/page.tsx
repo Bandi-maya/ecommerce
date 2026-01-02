@@ -14,6 +14,9 @@ import PreferLearn from "./home/PreferLearn"
 import VideoModal from "@/app/home/VideoModal"
 
 import CircuitBackground from "@/components/background/CircuitBackground"
+import AwardsSection from "./home/AwardsSection"
+import PartnersSection from "./home/PartnersEction"
+import NewsroomSection from "./home/NewsroomSection"
 
 const Index = () => {
   const { theme } = useTheme()
@@ -75,6 +78,10 @@ const Index = () => {
         />
 
         <NewsletterSection getCSSVar={getCSSVar} />
+
+        <AwardsSection />
+        <PartnersSection />
+        <NewsroomSection />
       </div>
     </div>
   )
